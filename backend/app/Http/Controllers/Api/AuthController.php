@@ -12,39 +12,44 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $validated = $request->validate([
-            'name'          => 'required|string',
-            'bio'           => 'required|string',
-            'username'      => 'required|string',
-            'password'      => 'required|string',
-            'is_private'    => 'boolean',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name'          => 'required|string',
+                'bio'           => 'required|string',
+                'username'      => 'required|string',
+                'password'      => 'required|string',
+                'is_private'    => 'boolean',
+            ]);
 
-        $userId = DB::table('users')->insertGetId([
-            'name'          => $validated['name'],
-            'bio'           => $validated['bio'],
-            'username'      => $validated['username'],
-            'password'      => Hash::make($validated['password']),
-            'is_private'    => $validated['is_private'] ?? false,
-            'created_at'    => now(),
-            'updated_at'    => now(),
-        ]);
+            $userId = DB::table('users')->insertGetId([
+                'name'          => $validated['name'],
+                'bio'           => $validated['bio'],
+                'username'      => $validated['username'],
+                'password'      => Hash::make($validated['password']),
+                'is_private'    => $validated['is_private'] ?? false,
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
 
-        $user = \App\Models\User::find($userId);
+            $user = \App\Models\User::find($userId);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'message' => 'register succes',
-            'token'   => $token,
-            'user'    => [
-                'id'        => $user->id,
-                'name'      => $user->name,
-                'bio'       => $user->bio,
-                'username'  => $user->username,
-                'is_private'=> $user->is_private,
-            ]    
-        ], 201);
+            return response()->json([
+                'message' => 'register succes',
+                'token'   => $token,
+                'user'    => [
+                    'id'        => $user->id,
+                    'name'      => $user->name,
+                    'bio'       => $user->bio,
+                    'username'  => $user->username,
+                    'is_private'=> $user->is_private,
+                ]    
+            ], 201);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+        
     }
 
     public function login(Request $request)
