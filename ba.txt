@@ -1,0 +1,31 @@
+XX_SERVER_MODULE/
+├── BACKEND/              ← Laravel project (tanpa vendor folder saat zip)
+│   ├── app/
+│   ├── routes/api.php
+│   └── ...
+├── FRONTEND/             ← React/Vue project (tanpa node_modules)
+│   ├── src/
+│   ├── public/
+│   └── ...y
+├── db-dump.sql
+└── db-diagram.pdf        ← ER diagram
+
+install
+1.composer create-project laravel/Laravel backend
+jika error unzip,buka ini =C:\xampp\php\php.ini,ubah jadi extension=zip
+2.setting env,arahkan ke mysql
+3.edit migration users di database/migrations
+4.tambah table migration sesuai sesuai kebutuhan php artisan make:migration create_posts_table
+5.php artisan migrate
+6.composer require laravel/sanctum
+7.php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+8.php artisan storage:link
+9.php artisan key:generate
+10.php artisan migrate:fresh
+11.buka bootstrap/app.php ganti
+12.buka app/Models/User.php ganti
+13.buat api.php manual
+14.buat semua controllernya php artisan make:controller Api/AuthController
+15.jangan lupa dipostman->headers=key(Accept),Value(Application/json) dan headers=key(content type),Value(Application/json)
+
+http://127.0.0.1:8000/api/.......

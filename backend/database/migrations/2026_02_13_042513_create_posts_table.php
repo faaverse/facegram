@@ -17,7 +17,7 @@ return new class extends Migration
                   ->constrained('users')
                   ->onDelete('cascade');
             $table->text('caption');
-            $table->softDeletes();
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

@@ -50,7 +50,7 @@ export default function Register() {
           <label>Bio</label><br />
           <textarea name="bio" value={form.bio} onChange={handleChange} />
         </div>
-
+    
         <div>
           <label>Username</label><br />
           <input type="text" name="username" value={form.username} onChange={handleChange} />
