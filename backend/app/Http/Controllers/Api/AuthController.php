@@ -46,15 +46,20 @@ class AuthController extends Controller
                     'is_private'=> $user->is_private,
                 ]    
             ], 201);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (\Exceotion $e) {
+            return response()->json([
+                'succes'    =>  false,
+                'message'   =>  'akun sudah terdaftar',
+                'error'     =>  $e->getmessage()
+            ], 500);
         }
         
     }
 
     public function login(Request $request)
     {
-        $validated = $request->validate([
+        try {
+            $validated = $request->validate([
             'username'  => 'required|string',
             'password'  => 'required|string',
         ]);
@@ -79,11 +84,20 @@ class AuthController extends Controller
                 'is_private'=> $user->is_private,
             ]
         ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'succes'     =>     false,
+                'message'   =>     'password anda salah',
+                'error'     =>      $e->getmessage()
+            ], 500);
+        }
+        
     }
 
     public function private(Request $request)
     {
-        $request->validate([
+        try {
+            $request->validate([
             'is_private' => 'required|boolean'
         ]);
 
@@ -103,11 +117,20 @@ class AuthController extends Controller
                 : 'Akun sekarang public',
             'is_private' => (bool)$request->is_private
         ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'succes'    =>  false,
+                'message'   =>  'gagal',
+                'error'     =>  $get->getmessage()
+            ], 500);
+        }
+        
     }
 
     public function showUser()
     {
-        $users = DB::table('users')
+        try {
+            $users = DB::table('users')
             ->select('name', 'bio', 'username')
             ->get();
 
@@ -116,11 +139,20 @@ class AuthController extends Controller
             'total'   => $users->count(),
             'users'   => $users
         ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'succes'    =>  false,
+                'message'   =>  'gagal acces',
+                'error'     =>  $getmessage()
+            ], 500);
+        }
+        
     }
 
     public function me(Request $request)
     {
-    $user = $request->user();
+        try {
+            $user = $request->user();
 
     // jumlah post
     $totalPosts = DB::table('posts')
@@ -153,7 +185,15 @@ class AuthController extends Controller
             'followers'  => $followers,
             'following'  => $following,
         ]
-    ], 200);}
+    ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'succes'    =>  false,
+                'message'   =>  'gagal menampilkan profile',
+                'error'     =>  $e->getmessage()
+            ], 500);
+        }
+    }
 
 
     public function posts(Request $request)
@@ -209,7 +249,8 @@ class AuthController extends Controller
 
     public function follows(Request $request)
     {
-        $request->validate([
+        try {
+            $request->validate([
             'followed_id' => 'required|exists:users,id'
         ]);
 
@@ -261,10 +302,23 @@ class AuthController extends Controller
                 : 'Permintaan follow dikirim',
             'accepted' => $accepted
         ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'succes'    =>  false,
+                'message'   =>  'gagal mengikuti user',
+                'error'     =>  $e->getmessage()
+            ], 500);
+        }
+        
     }
 
     public function accept(Request $request)
     {
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
         $request->validate([
             'follower_id' => 'required|exists:users,id'
         ]);
@@ -301,8 +355,9 @@ class AuthController extends Controller
     }
 
     public function hp(Request $request)
-{
-    $authId = auth()->id();
+    {
+        try {
+            $authId = auth()->id();
 
     $posts = DB::table('posts')
         ->join('users', 'posts.user_id', '=', 'users.id')
@@ -342,12 +397,21 @@ class AuthController extends Controller
         'success' => true,
         'data' => $posts
     ]);
-}
+        } catch (\Exception $e) {
+            return response()->json([
+                'succes'    =>  false,
+                'message'   =>  'gagal menampilkan halaman',
+                'error'     =>  $e->getmessage()
+            ], 500);
+        }
+    
+    }
 
 
     public function delete($id)
     {
-        $authId = auth()->id();
+        try {
+            $authId = auth()->id();
 
         $post = DB::table('posts')->where('id', $id)->first();
 
@@ -377,7 +441,12 @@ class AuthController extends Controller
     'message' => 'Post berhasil terhapus'
 ], 200);
 
+        } catch (\Throwable $th) {
+            return response()->json([
+                'succes'    =>  false,
+                'message'   =>  'gagal menghapus postingan',
+                'error'     =>  $e->getmessage()
+            ], 500);
+        }
     }
-
-
 }
