@@ -3,20 +3,24 @@ import Login from "./page/Login";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Profile from "./page/Profile";
-
-
+import Home from "./page/Home";
 
 const router = createBrowserRouter([
   {
     path: "/register",
-    element: <Register/>,
+    element: <Register />,
   },
   {
     path: "/",
-    element: <Login/>,
-  },{
+    element: <Login />,
+  },
+  {
     path: "/profile",
-    element: <Profile/>,
+    element: <Profile />,
+  },
+  {
+    path: "/home",
+    element: <Home />,
   },
 ]);
 function App() {
