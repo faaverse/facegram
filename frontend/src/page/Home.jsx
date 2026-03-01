@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -70,16 +70,26 @@ export default function Home() {
               </div>
 
               <div style={{ marginBottom: "10px" }}>
-                <img
-                  src={`${baseUrl}${post.storage_path}`}
-                  alt={post.caption}
-                  style={{
-                    maxWidth: "100%",
-                    maxHeight: "400px",
-                    objectFit: "contain",
-                    border: "1px solid #eee",
-                  }}
-                />
+                <div style={{ marginBottom: "10px" }}>
+                  {post.attachments && post.attachments.length > 0 ? (
+                    post.attachments.map((file, i) => (
+                      <img
+                        key={i}
+                        src={`${baseUrl}${file.storage_path}`}
+                        alt={post.caption}
+                        style={{
+                          maxWidth: "100%",
+                          maxHeight: "400px",
+                          objectFit: "contain",
+                          border: "1px solid #eee",
+                          marginBottom: "10px",
+                        }}
+                      />
+                    ))
+                  ) : (
+                    <p>No Image</p>
+                  )}
+                </div>
               </div>
 
               <div style={{ marginBottom: "5px" }}>
