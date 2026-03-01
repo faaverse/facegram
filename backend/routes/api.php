@@ -15,7 +15,7 @@ Route::get('/login', function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users/{username}', [AuthController::class, 'showUser']);
     Route::get('/auth/me', [AuthController::class, 'me']);
-    Route::post('/users/post', [AuthController::class, 'posts']);
+    Route::post('/users/post', [AuthController::class, 'posts']);   
     Route::post('/users/follow', [AuthController::class, 'follows']);
     Route::post('/users/private', [AuthController::class, 'private']);
     Route::post('/users/accept', [AuthController::class, 'accept']);
